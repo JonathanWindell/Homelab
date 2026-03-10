@@ -64,13 +64,13 @@ Here is a detailed breakdown of the services currently running across the nodes:
   * **Auto-updaters:** Automated container lifecycle management.
 * **Productivity & Tools:**
   * **Paperless-ngx:** Digital document management and OCR.
-  * **Portainer:** GUI for managing Docker environments.
   * **Syncthing:** P2P file synchronization between devices to protect data locally. 
   * **Linkwarden:** Bookmark manager to easily organize and archive web links. 
   * **File Browser:** Web interface for easy browsing of files across LXC containers and VMs.
   * **Gotenberg:** Developer-friendly API for converting various formats to PDF. 
-* **Dashboards:**
+* **Dashboard & Portfolio:**
   * **Homepage:** Centralized starting page for quick access to all services. `[Tailscale Node]`
+  * **Personal Portfolio:** Self-hosting personal portfolio. *[Portfolio](https://portfolio.jonathans-labb.org/)*
 
 ### Node 2: NAS Ugreen DXP2800 (Docker)
 * **Jellyfin:** Open-source media server for streaming movies and shows to end devices.
