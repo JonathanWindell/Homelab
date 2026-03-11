@@ -12,78 +12,104 @@ An overview and documentation of my personal homelab environment, network archit
 ## Overview
 This repository contains the configurations, docker-compose files, and Infrastructure as Code (IaC) for my homelab. The primary goals of this environment are to learn new technologies, self-host essential services, and experiment with network security and automation. *[Homelab Diagram](./Homelab_Diagram.png)*
 
-> **Looking for Homelab guides?** > All hardware-agnostic documentation and step-by-step guides for setting up these services from scratch can be found in my separate repository: *[Homelab Manuals](URL_TO_MANUALS*)*.
+> **Looking for Homelab guides?** All hardware-agnostic documentation and step-by-step guides for setting up these services from scratch can be found in my separate repository: [**Homelab Manuals**](https://github.com/JonathanWindell/Homelab-Manuals).
 
 ---
 
 ## Architecture & Hardware
 
-My infrastructure is logically divided into distinct VLANs to separate the core home network from isolated security testing environments. 
+### Networking & VLAN Configuration
+My infrastructure is logically divided into distinct VLANs to separate the core home network from isolated security testing environments.
 
-### Networking & External Services
-* **Gateway:** Ubiquiti Cloud Gateway Ultra (UCG Ultra)
-* **Switch:** Ubiquiti USW Flex
-* **VLAN 1 (Home Network):** Main secure network for trusted end devices and core services.
-* **VLAN 2 (Honeypot):** Isolated network strictly for security monitoring and capturing malicious traffic.
+| Network | Description | Purpose |
+| :--- | :--- | :--- |
+| **VLAN 1** | Home Network | Main secure network for trusted end devices and core services. |
+| **VLAN 2** | Honeypot | Isolated network strictly for security monitoring and capturing malicious traffic. |
 
-**External Integrations:**
-* **Cloudflare:** Domain name management and DNS.
-* **Discord:** Utilized for incoming webhooks to route simple system alerts.
-* **GitHub:** Version control and backups for docker configurations.
-* **UniFi Remote Site Manager:** Remote management of routing and switching infrastructure.
+| External Service | Category | Badge |
+| :--- | :--- | :--- |
+| **Ubiquiti Ecosystem** | Gateway & Switching | ![Ubiquiti](https://img.shields.io/badge/Ubiquiti-0559C9?logo=ubiquiti&logoColor=white) |
+| **Cloudflare** | DNS & Domain Management | ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?logo=Cloudflare&logoColor=white) |
+| **GitHub** | Version Control & Backups | ![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white) |
+| **Discord** | System Alerts (Webhooks) | ![Discord](https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white) |
 
-### Compute & Storage Nodes
-* **Compute (Proxmox VE):** HP Prodesk 600 G3 Mini. Handles the heavy lifting, running a mix of VMs and LXC containers.
-* **Storage (NAS):** Ugreen DXP2800. Dedicated to bulk storage and media serving.
-* **Security Node:** Raspberry Pi Model 3. Placed securely on the isolated VLAN 2.
+### Hardware Nodes
+
+| Node | Hardware | OS/Hypervisor | Primary Role |
+| :--- | :--- | :--- | :--- |
+| **Node 1** | HP Prodesk 600 G3 | ![Proxmox](https://img.shields.io/badge/Proxmox-E57000?logo=proxmox&logoColor=white) | Main Compute (VMs/LXC) |
+| **Node 2** | Ugreen DXP2800 | ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white) | NAS & Media Storage |
+| **Node 3** | Raspberry Pi 3 | ![Linux](https://img.shields.io/badge/Raspberry_Pi-A22846?logo=raspberrypi&logoColor=white) | Security Node (VLAN 2) |
 
 ---
 
 ## Services & Containers
 
-Here is a detailed breakdown of the services currently running across the nodes:
-
 ### Node 1: HP Prodesk 600 G3 Mini (Proxmox)
-*This node runs multiple environments, utilizing both Virtual Machines and Linux Containers (LXC).*
 
-**VM: Torrenting Box**
-* **qBittorrent & VPN:** An isolated Docker environment for secure, routed P2P downloading through a dedicated VPN tunnel.
+#### Virtual Machines (VM)
+| Service | Badge | Description | Tags |
+| :--- | :--- | :--- | :--- |
+| **Torrenting Box** | ![qBittorrent](https://img.shields.io/badge/qBittorrent-61DAFB?logo=qbittorrent&logoColor=black) | Isolated Docker environment for secure P2P via VPN. | `VM` `VPN` |
 
-**LXC: Core Services (Docker)**
-* **Network & Security:** * **Nginx Proxy Manager (NPM):** Manages incoming web traffic, SSL certificates, and internal routing. `[Tailscale Node]` `[Wazuh Agent]`
-  * **AdGuard Home:** Network-wide DNS sinkhole for blocking ads and tracking domains (includes Tailscale subnet routing). `[Tailscale Node]` `[Wazuh Agent]`
-* **Monitoring & Alerting:**
-  * **Wazuh:** Open-source security platform for threat detection and SIEM.
-  * **Grafana & Prometheus:** Metric collection and visual dashboards for system health.
-  * **Glances:** Real-time system monitoring. 
-  * **Uptime Kuma:** Uptime tracking and alerting for all internal/external services. `[Tailscale Node]`
-  * **Prometheus Alerts:** Self-hosted notification server for routing system alerts.
-* **Dev & Automation:**
-  * **n8n:** My primary workflow automation engine. *[See my n8n-workflows repo](https://github.com/JonathanWindell/n8n-workflows)*
-  * **Gitea:** Self-hosted Git service for local version control (runs with scheduled cron backups). 
-  * **Auto-updaters:** Automated container lifecycle management.
-* **Productivity & Tools:**
-  * **Paperless-ngx:** Digital document management and OCR.
-  * **Syncthing:** P2P file synchronization between devices to protect data locally. 
-  * **Linkwarden:** Bookmark manager to easily organize and archive web links. 
-  * **File Browser:** Web interface for easy browsing of files across LXC containers and VMs.
-  * **Gotenberg:** Developer-friendly API for converting various formats to PDF. 
-* **Dashboard & Portfolio:**
-  * **Homepage:** Centralized starting page for quick access to all services. `[Tailscale Node]`
-  * **Personal Portfolio:** Self-hosting personal portfolio. *[Portfolio](https://portfolio.jonathans-labb.org/)*
+#### Linux Containers (LXC)
+
+**Network & Security**
+| Service | Badge | Description | Tags |
+| :--- | :--- | :--- | :--- |
+| **Nginx Proxy Manager** | ![Nginx](https://img.shields.io/badge/Nginx-009639?logo=nginx&logoColor=white) | Reverse Proxy & SSL Management | `[Tailscale Node]` `[Wazuh Agent]` |
+| **AdGuard Home** | ![AdGuard](https://img.shields.io/badge/AdGuard-67B279?logo=adguard&logoColor=white) | DNS Sinkhole & Tailscale routing | `[Tailscale Node]` `[Wazuh Agent]` |
+
+**Monitoring & Alerting**
+| Service | Badge | Description | Tags |
+| :--- | :--- | :--- | :--- |
+| **Wazuh** | ![Wazuh](https://img.shields.io/badge/Wazuh-00A9E0?logo=wazuh&logoColor=white) | SIEM & Threat Detection | |
+| **Grafana** | ![Grafana](https://img.shields.io/badge/Grafana-F46800?logo=grafana&logoColor=white) | Metrics Visualization Dashboards | |
+| **Prometheus** | ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?logo=prometheus&logoColor=white) | Time-series Metric Collection | |
+| **Glances** | ![Monitoring](https://img.shields.io/badge/Glances-999?logo=activitypub&logoColor=white) | Real-time System Monitoring | |
+| **Uptime Kuma** | ![Uptime](https://img.shields.io/badge/Uptime_Kuma-61DBFB?logo=statuspage&logoColor=black) | Uptime tracking for services | `[Tailscale Node]` |
+| **Prometheus Alerts** | ![Alerts](https://img.shields.io/badge/Alerts-E6522C?logo=prometheus&logoColor=white) | Self-hosted notification routing | |
+
+**Dev & Automation**
+| Service | Badge | Description | Tags |
+| :--- | :--- | :--- | :--- |
+| **n8n** | ![n8n](https://img.shields.io/badge/n8n-FF6D5B?logo=n8n&logoColor=white) | Workflow Engine *[**n8n-workflows**](https://github.com/JonathanWindell/n8n-workflows)* | |
+| **Gitea** | ![Gitea](https://img.shields.io/badge/Gitea-609926?logo=gitea&logoColor=white) | Self-hosted Git with Cron backups | |
+| **Auto-updaters** | ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white) | Automated container management | |
+
+**Productivity & Tools**
+| Service | Badge | Description | Tags |
+| :--- | :--- | :--- | :--- |
+| **Paperless-ngx** | ![Paperless](https://img.shields.io/badge/Paperless-000?logo=googledocs&logoColor=white) | Document Management & OCR | |
+| **Syncthing** | ![Syncthing](https://img.shields.io/badge/Syncthing-0882C0?logo=syncthing&logoColor=white) | P2P File Synchronization | |
+| **Linkwarden** | ![Linkwarden](https://img.shields.io/badge/Linkwarden-5C2D91?logo=bookmark&logoColor=white) | Bookmark Archive & Manager | |
+| **File Browser** | ![Files](https://img.shields.io/badge/File_Browser-00A4EF?logo=files&logoColor=white) | Web UI for filesystem access | |
+| **Gotenberg** | ![Gotenberg](https://img.shields.io/badge/Gotenberg-blue?logo=adobeacrobatreader&logoColor=white) | API for PDF conversions | |
+
+**Dashboard & Portfolio**
+| Service | Badge | Description | Tags |
+| :--- | :--- | :--- | :--- |
+| **Homepage** | ![Dashboard](https://img.shields.io/badge/Homepage-333?logo=speedtest&logoColor=white) | Central Service Dashboard | `[Tailscale Node]` |
+| **Personal Portfolio** | ![Portfolio](https://img.shields.io/badge/Portfolio-61DBFB?logo=react&logoColor=black) | Self-hosted *[**Portfolio Site**](https://portfolio.jonathans-labb.org/)* | |
+
+---
 
 ### Node 2: NAS Ugreen DXP2800 (Docker)
-* **Jellyfin:** Open-source media server for streaming movies and shows to end devices.
-* **Photo/Media Management:** Dedicated containers for backing up and organizing personal media.
+| Service | Badge | Description |
+| :--- | :--- | :--- |
+| **Jellyfin** | ![Jellyfin](https://img.shields.io/badge/Jellyfin-00A4EF?logo=jellyfin&logoColor=white) | Media server for local streaming |
+| **Photo/Media** | ![Media](https://img.shields.io/badge/Photos-FFB000?logo=googlephotos&logoColor=white) | Dedicated media backup containers |
+
+---
 
 ### Node 3: Raspberry Pi Model 3 (Docker)
-* **Web-Honeypot:** Placed on the isolated VLAN 2, this container deliberately exposes simulated vulnerable services to the internet to log, monitor, and analyze malicious traffic. `[Wazuh Agent]`
+| Service | Badge | Description | Tags |
+| :--- | :--- | :--- | :--- |
+| **Web-Honeypot** | ![Honeypot](https://img.shields.io/badge/Honeypot-E01E5A?logo=target&logoColor=white) | Captures malicious traffic on VLAN 2 | `[Wazuh Agent]` `VLAN 2` |
 
 ---
 
 ## Inspiration & Resources
-If you wish to get started with your own homelabbing journey, I hope you can find some inspiration here! Below are some of my favorite resources that helped me learn:
-
 * [NetworkChuck](https://www.youtube.com/@NetworkChuck)
 * [Tailscale](https://www.youtube.com/@Tailscale)
 * [Lawrence Systems](https://www.youtube.com/@LAWRENCESYSTEMS)
@@ -99,4 +125,4 @@ I'm Jonathan, and I develop projects in my spare time that help myself and other
 ---
 
 ## License
-This project is licensed under the [Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/). You are free to share and adapt the material, provided you give appropriate credit and distribute your contributions under the same license.
+This project is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
