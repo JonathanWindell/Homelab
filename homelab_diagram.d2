@@ -42,7 +42,7 @@ home_network: Home Network {
   }
 
   proxmox_server: Proxmox Server (Tailscale Node) {
-    grid-columns: 2
+    grid-rows: 1
     shape: rectangle
     class: network_hardware
 
@@ -59,7 +59,9 @@ home_network: Home Network {
     }
 
     lxc_containers: LXC Containers {
+      grid-columns: 3
       class: network_hardware
+
       monitoring: Monitoring {
         class: network_hardware
         shape: rectangle
@@ -72,6 +74,7 @@ home_network: Home Network {
           - Glances
         |
       }
+
       network_security: Network Security {
         class: network_hardware
         shape: rectangle
@@ -80,6 +83,7 @@ home_network: Home Network {
           - AdGuard
         |
       }
+
       dev_automation: Dev & Automation {
         class: network_hardware
         shape: rectangle
@@ -89,6 +93,7 @@ home_network: Home Network {
           - CI/CD Pipeline
         |
       }
+
       productivity_tools: Productivity & Tools {
         class: network_hardware
         shape: rectangle
@@ -99,6 +104,15 @@ home_network: Home Network {
           - Linkwarden
           - Kimai
           - Filebrowser
+        |
+      }
+
+      dashboard_and_portfolio: Dashoard & Portfolio {
+        class: network_hardware
+        shape: rectangle
+        explanation: |md
+          - Homepage
+          - Personal Portfolio
         |
       }
     }
