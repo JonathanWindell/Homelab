@@ -1,0 +1,226 @@
+direction: down
+
+classes: {
+  network_hardware: {
+    style: {
+      stroke-width: 2
+
+      border-radius: 5
+    }
+  }
+}
+
+# Network Container Definition
+
+home_network: Home Network {
+  # ISP Node - Using a Cloud shape
+
+  isp_provider: ISP Provider {
+    shape: cloud
+
+    style: {fill: "#f0f7ff"}
+  }
+
+  # Family Google Nest Network
+  family_router: Google Nest - Family Router {
+    shape: cylinder
+
+    class: network_hardware
+  }
+
+  # Personal Router
+  ucg_ultra: UCG Ultra - Router {
+    shape: cylinder
+
+    class: network_hardware
+  }
+
+  # Personal Managed Switch
+  usw_flex: USW Flex - Switch {
+    shape: cylinder
+    class: network_hardware
+  }
+
+  proxmox_server: Proxmox Server (Tailscale Node) {
+    grid-columns: 2
+    shape: rectangle
+    class: network_hardware
+
+    virtual_machine: Virtual Machine {
+      class: network_hardware
+      docker_container: Docker {
+        class: network_hardware
+        shape: rectangle
+        explanation: |md
+          - QBit
+          - PIA
+        |
+      }
+    }
+
+    lxc_containers: LXC Containers {
+      class: network_hardware
+      monitoring: Monitoring {
+        class: network_hardware
+        shape: rectangle
+        explanation: |md
+          - Wazuh
+          - Grafana
+          - Prometheus
+          - Alertmanager
+          - Uptime Kuma
+          - Glances
+        |
+      }
+      network_security: Network Security {
+        class: network_hardware
+        shape: rectangle
+        explanation: |md
+          - Nginx
+          - AdGuard
+        |
+      }
+      dev_automation: Dev & Automation {
+        class: network_hardware
+        shape: rectangle
+        explanation: |md
+          - n8n
+          - Gitea
+          - CI/CD Pipeline
+        |
+      }
+      productivity_tools: Productivity & Tools {
+        class: network_hardware
+        shape: rectangle
+        explanation: |md
+          - Paperless NGX
+          - Gotenberg
+          - Syncthing
+          - Linkwarden
+          - Kimai
+          - Filebrowser
+        |
+      }
+    }
+  }
+
+  network_attached_storage: Ugreen NAS (Tailscale Node) {
+    shape: rectangle
+    class: network_hardware
+    docker_container: Docker Containers {
+      explanation: |md
+        - Jellyfin
+        - Navidrome
+        - Node Exporter
+      |
+    }
+  }
+
+  raspberry_pi: Raspberry Pi {
+    shape: rectangle
+    class: network_hardware
+    docker_container: Docker Containers {
+      explanation: |md
+        - Web Honeypot
+      |
+    }
+  }
+
+  external_services: External Services {
+    shape: rectangle
+    class: network_hardware
+    explanation: |md
+      - Cloudflare (Domain Name)
+      - Discord (Webhooks)
+      - Unifi (Remote Site Manager)
+      - Github (IaC & Manuals)
+    |
+  }
+
+  laptop: Laptop (End Device) {
+    explanation: |md
+      - Windows 11
+      - Tailscale Node
+    |
+  }
+
+  desktop: Desktop Computer (End Device) {
+    explanation: |md
+      - Windows 11
+      - Tailscale Node
+    |
+  }
+
+  # Connections
+  isp_provider -> family_router: WAN Connection {
+    style: {
+      stroke: "#0066cc"
+
+      stroke-width: 3
+    }
+  }
+
+  isp_provider -> external_services: External Services {
+    style: {
+      stroke: "#0066cc"
+
+      stroke-width: 3
+    }
+  }
+
+  family_router -> ucg_ultra: Double NAT {
+    style: {
+      stroke: "#0066cc"
+
+      stroke-width: 3
+    }
+  }
+
+  ucg_ultra -> usw_flex: Managed Switch {
+    style: {
+      stroke: "#0066cc"
+
+      stroke-width: 3
+    }
+  }
+
+  ucg_ultra -> proxmox_server: VLAN 1 (Home Network) {
+    style: {
+      stroke: "#0066cc"
+
+      stroke-width: 3
+    }
+  }
+
+  ucg_ultra -> network_attached_storage: VLAN 1 (Home Network) {
+    style: {
+      stroke: "#0066cc"
+
+      stroke-width: 3
+    }
+  }
+
+  family_router -> laptop: NPM & Subnet Access {
+    style: {
+      stroke: "#0066cc"
+
+      stroke-width: 3
+    }
+  }
+
+  ucg_ultra -> desktop: VLAN 1 (Home Network) {
+    style: {
+      stroke: "#0066cc"
+
+      stroke-width: 3
+    }
+  }
+
+  usw_flex -> raspberry_pi: VLAN 2 (Honeypot) {
+    style: {
+      stroke: "#0066cc"
+
+      stroke-width: 3
+    }
+  }
+}
