@@ -10,7 +10,7 @@
 An overview and documentation of my personal homelab environment, network architecture, and self-hosted infrastructure.
 
 ## Overview
-This repository contains the configurations, docker-compose files, and Infrastructure as Code (IaC) for my homelab. The primary goals of this environment are to learn new technologies, self-host essential services, and experiment with network security and automation. *[**Homelab Diagram**](./Homelab_Diagram.png)*
+This repository contains the configurations, docker-compose files, and Infrastructure as Code (IaC) for my homelab. The primary goals of this environment are to learn new technologies, self-host essential services, and experiment with network security and automation. *[**Homelab Diagram**](https://raw.githubusercontent.com/JonathanWindell/Homelab/refs/heads/main/homelab_diagram.svg)*
 
 > **Looking for Homelab guides?** All hardware-agnostic documentation and step-by-step guides for setting up these services from scratch can be found in my separate repository: *[**Homelab Manuals**](https://github.com/JonathanWindell/Homelab-Manuals)*.
 
