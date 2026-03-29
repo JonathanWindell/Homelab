@@ -53,7 +53,7 @@ home_network: Home Network {
         shape: rectangle
         explanation: |md
           - QBit
-          - PIA
+          - PIA (VPN)
         |
       }
     }
@@ -138,6 +138,8 @@ home_network: Home Network {
   }
 
   laptop: Laptop (End Device) {
+    class: network_hardware
+    shape: rectangle
     explanation: |md
       - Windows 11
       - Tailscale Node
@@ -145,6 +147,8 @@ home_network: Home Network {
   }
 
   desktop: Desktop Computer (End Device) {
+    class: network_hardware
+        shape: rectangle
     explanation: |md
       - Windows 11
       - Tailscale Node
