@@ -42,11 +42,11 @@ home_network: Home Network {
   }
 
   proxmox_server: Proxmox Server (Tailscale Node) {
-    grid-rows: 1
+    grid-rows: 2
     shape: rectangle
     class: network_hardware
 
-    virtual_machine: Virtual Machine {
+    virtual_machine: Virtual Machine 1 {
       class: network_hardware
       docker_container: Docker {
         class: network_hardware
@@ -54,6 +54,19 @@ home_network: Home Network {
         explanation: |md
           - QBit
           - PIA (VPN)
+        |
+      }
+    }
+
+    virtual_machine2: Virtual Machine 2 {
+      class: network_hardware
+      docker_container: Docker {
+        class: network_hardware
+        shape: rectangle
+        explanation: |md
+          - Paperless NGX (Tika & Gotenberg)
+          - Personal Portfolio
+          - n8n
         |
       }
     }
@@ -84,13 +97,13 @@ home_network: Home Network {
         |
       }
 
-      dev_automation: Dev & Automation {
+      dev_automation: Development & Dashboard {
         class: network_hardware
         shape: rectangle
         explanation: |md
-          - n8n
           - Gitea
           - CI/CD Pipeline
+          - Homepage
         |
       }
 
@@ -98,21 +111,10 @@ home_network: Home Network {
         class: network_hardware
         shape: rectangle
         explanation: |md
-          - Paperless NGX
-          - Gotenberg
           - Syncthing
           - Linkwarden
           - Kimai
           - Filebrowser
-        |
-      }
-
-      dashboard_and_portfolio: Dashoard & Portfolio {
-        class: network_hardware
-        shape: rectangle
-        explanation: |md
-          - Homepage
-          - Personal Portfolio
         |
       }
     }
